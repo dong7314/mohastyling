@@ -6,9 +6,11 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { name: '홈', href: '/home' },
-  { name: '포트폴리오', href: '/portfolio' },
-  { name: '개인 이력', href: '/about' },
+  { name: 'profile', href: '/about' },
+  { name: 'portfolio', href: '/portfolio' },
+  { name: 'service', href: '/service' },
+  { name: 'studio', href: '/studio' },
+  { name: 'all in one', href: '/all-in-one' },
 ];
 
 export function Header() {
@@ -28,7 +30,8 @@ export function Header() {
       <nav className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link
           href="/home"
-          className="font-serif text-2xl font-semibold tracking-tight text-neutral-900 hover:text-accent transition-colors"
+          className="font-open-sans text-2xl font-semibold tracking-tight text-neutral-900 hover:text-accent transition-colors"
+          style={{ letterSpacing: '2px' }}
         >
           Moha Styling
         </Link>

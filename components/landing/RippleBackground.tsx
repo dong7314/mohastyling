@@ -27,12 +27,11 @@ export function RippleBackground() {
         canvas.height = window.innerHeight;
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          // Create gradient with water/cloud colors
+          // Create gradient with light accent for better ripple visibility
           const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-          gradient.addColorStop(0, '#e8f4f8');
-          gradient.addColorStop(0.3, '#f0f8ff');
-          gradient.addColorStop(0.6, '#ffffff');
-          gradient.addColorStop(1, '#d4e9ed');
+          gradient.addColorStop(0, '#faf8f7');
+          gradient.addColorStop(0.5, '#fff5f3');
+          gradient.addColorStop(1, '#f8f0ef');
           ctx.fillStyle = gradient;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
@@ -93,7 +92,7 @@ export function RippleBackground() {
       ref={containerRef}
       className="fixed inset-0 -z-10"
       style={{
-        background: 'linear-gradient(135deg, #e8f4f8 0%, #f0f8ff 30%, #ffffff 60%, #d4e9ed 100%)',
+        background: 'linear-gradient(135deg, #faf8f7 0%, #fff5f3 50%, #f8f0ef 100%)',
       }}
     />
   );

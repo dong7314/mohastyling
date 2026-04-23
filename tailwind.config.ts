@@ -37,8 +37,8 @@ const config: Config = {
           950: '#0a0a0a',
         },
         accent: {
-          DEFAULT: '#e07a5f',
-          hover: '#d16a4f',
+          DEFAULT: '#6ba3c8',
+          hover: '#5a8fb3',
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

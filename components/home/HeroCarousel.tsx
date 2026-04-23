@@ -21,14 +21,14 @@ export function HeroCarousel() {
   }, []);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
+    <section className="relative h-[70vh] w-full overflow-hidden mt-16">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 1.5 }}
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -100 }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
           className="absolute inset-0"
         >
           <div
@@ -40,22 +40,6 @@ export function HeroCarousel() {
           </div>
         </motion.div>
       </AnimatePresence>
-
-      {/* Center text */}
-      <div className="absolute inset-0 flex items-center justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="max-w-4xl text-center"
-        >
-          <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl font-normal leading-relaxed text-neutral-900">
-            스튜디오 모하는 고객만을 위한,<br />
-            그리고 제품의 탄생을 위한<br />
-            사진으로 진심으로 작업을 진행합니다.
-          </h1>
-        </motion.div>
-      </div>
 
       {/* Slide indicators */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
