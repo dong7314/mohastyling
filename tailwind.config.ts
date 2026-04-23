@@ -20,6 +20,7 @@ const config: Config = {
       fontFamily: {
         serif: ["var(--font-playfair)", "serif"],
         sans: ["var(--font-noto-sans)", "sans-serif"],
+        'open-sans': ["var(--font-open-sans)", "sans-serif"],
       },
       colors: {
         neutral: {

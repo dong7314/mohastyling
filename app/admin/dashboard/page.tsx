@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Plus, Pencil, Trash2, LogOut } from 'react-icons';
+import { Plus, Pencil, Trash2, LogOut } from 'lucide-react';
 import { PortfolioItem, PortfolioCategory } from '@/types/portfolio';
 import Image from 'next/image';
 

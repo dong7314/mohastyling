@@ -8,7 +8,6 @@ export default function LandingPage() {
   const router = useRouter();
 
   const handleClick = () => {
-    console.log('Navigating to home...');
     router.push('/home');
   };
 
@@ -27,7 +26,7 @@ export default function LandingPage() {
           className="text-center"
         >
           <motion.h1
-            className="font-serif text-7xl md:text-9xl font-light tracking-wider text-neutral-800"
+            className="font-open-sans text-7xl md:text-9xl font-normal text-neutral-800 tracking-[3px]"
             animate={{
               textShadow: [
                 '0 0 20px rgba(255,255,255,0.8)',
@@ -43,9 +42,14 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.6 }}
             transition={{ delay: 1, duration: 1 }}
-            className="mt-4 text-sm tracking-[0.3em] text-neutral-600"
+            className="w-full mt-5 text-left text-sm "
           >
-            FOOD STYLIST
+            <span className="text-neutral-600 tracking-[0.15em] ml-1">Food</span>
+            <span className="text-neutral-600 tracking-[0.15em] ml-2">product</span>
+            <span className="text-neutral-600 tracking-[0.15em] ml-2">cosmetics</span>
+            <span className="text-neutral-600 tracking-[0.15em] ml-2">life</span>
+            <span className="text-neutral-600 tracking-[0.15em] ml-2">style</span>
+            <span className="text-neutral-600 tracking-[0.15em] ml-2">movie</span>
           </motion.p>
         </motion.div>
       </div>

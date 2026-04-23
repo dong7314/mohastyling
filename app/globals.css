@@ -70,6 +70,10 @@
   .font-sans {
     font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   }
+
+  .font-open-sans {
+    font-family: var(--font-open-sans), sans-serif;
+  }
 }
 
 /* Liquid glass effect utility */
