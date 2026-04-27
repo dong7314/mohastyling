@@ -74,6 +74,10 @@
   .font-open-sans {
     font-family: var(--font-open-sans), sans-serif;
   }
+
+  .font-caveat {
+    font-family: var(--font-caveat), cursive;
+  }
 }
 
 /* Liquid glass effect utility */

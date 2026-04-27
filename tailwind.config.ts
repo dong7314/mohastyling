@@ -21,6 +21,7 @@ const config: Config = {
         serif: ["var(--font-playfair)", "serif"],
         sans: ["var(--font-noto-sans)", "sans-serif"],
         'open-sans': ["var(--font-open-sans)", "sans-serif"],
+        caveat: ["var(--font-caveat)", "cursive"],
       },
       colors: {
         neutral: {

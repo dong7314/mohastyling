@@ -46,7 +46,7 @@ export function IntroSection() {
             variants={itemVariants}
             className="font-sans font-medium text-4xl md:text-5xl mb-14 text-neutral-900 leading-[90px]"
           >
-            우리의 쌓이 시간들이
+            우리의 쌓인 시간들이
           </motion.h2>
 
           <motion.h2

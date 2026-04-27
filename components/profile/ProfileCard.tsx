@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { Briefcase, User, Sparkles } from 'lucide-react';
-import Image from 'next/image';
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
+import { Briefcase, User, Sparkles } from "lucide-react";
+import Image from "next/image";
 
 const clients = [
-  '세라젬',
-  '하이뮨',
-  '실리팟',
-  '데켓',
-  '풀무원',
-  '닥터브로너스',
+  "세라젬",
+  "하이뮨",
+  "실리팟",
+  "데켓",
+  "풀무원",
+  "닥터브로너스",
 ];
 
 export function ProfileCard() {
@@ -43,11 +43,14 @@ export function ProfileCard() {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start"
         >
           {/* Left: Profile Image */}
-          <motion.div variants={itemVariants} className="lg:col-span-2 relative">
+          <motion.div
+            variants={itemVariants}
+            className="lg:col-span-2 relative"
+          >
             <div className="aspect-[3/4] rounded-3xl overflow-hidden bg-neutral-200 shadow-2xl max-w-[440px] mx-auto lg:mx-0">
               <Image
                 src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80"
@@ -63,7 +66,10 @@ export function ProfileCard() {
           </motion.div>
 
           {/* Right: Profile Info */}
-          <motion.div variants={itemVariants} className="lg:col-span-3 space-y-8 lg:pt-8">
+          <motion.div
+            variants={itemVariants}
+            className="lg:col-span-3 space-y-8 lg:pt-8"
+          >
             {/* Title */}
             <div className="mb-12">
               <h1 className="font-open-sans tracking-wide text-3xl md:text-5xl font-semibold text-neutral-900 mb-2">
@@ -77,7 +83,9 @@ export function ProfileCard() {
               <div className="flex items-center gap-4 pl-5 pr-6 py-4 rounded-2xl bg-neutral-50 border border-neutral-200">
                 <User className="w-6 h-6 text-accent" />
                 <div>
-                  <span className="font-sans text-xs text-neutral-500 block">대표</span>
+                  <span className="font-sans text-xs text-neutral-500 block">
+                    대표
+                  </span>
                   <p className="font-sans text-base font-medium text-neutral-900">
                     스타일리스트 지수정
                   </p>
@@ -86,7 +94,9 @@ export function ProfileCard() {
               <div className="flex items-center gap-4 pl-5 pr-6 py-4 rounded-2xl bg-neutral-50 border border-neutral-200">
                 <Briefcase className="w-6 h-6 text-accent" />
                 <div>
-                  <span className="font-sans text-xs text-neutral-500 block">경력</span>
+                  <span className="font-sans text-xs text-neutral-500 block">
+                    경력
+                  </span>
                   <p className="font-sans text-base font-medium text-neutral-900">
                     7년
                   </p>
@@ -97,7 +107,7 @@ export function ProfileCard() {
             {/* Description */}
             <div className="space-y-4">
               <p className="font-sans text-base text-neutral-700 leading-relaxed">
-                모하스타일링은 전반적인 스타일링을 기반으로,{' '}
+                모하스타일링은 전반적인 스타일링을 기반으로,{" "}
                 <span className="text-accent font-medium">
                   푸드 · 제품 · 뷰티 · 공간
                 </span>

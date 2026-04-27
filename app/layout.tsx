@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Noto_Serif_KR, Open_Sans } from "next/font/google";
+import { Playfair_Display, Noto_Serif_KR, Open_Sans, Caveat } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -15,6 +15,13 @@ const openSans = Open_Sans({
   variable: "--font-open-sans",
   display: "swap",
   weight: ["300", "400", "500", "600", "700", "800"],
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 const notoSerif = Noto_Serif_KR({
@@ -88,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" data-scroll-behavior="smooth" className={`${playfair.variable} ${notoSerif.variable} ${pretendard.variable} ${openSans.variable}`}>
+    <html lang="ko" data-scroll-behavior="smooth" className={`${playfair.variable} ${notoSerif.variable} ${pretendard.variable} ${openSans.variable} ${caveat.variable}`}>
       <body className="antialiased">{children}</body>
     </html>
   );
