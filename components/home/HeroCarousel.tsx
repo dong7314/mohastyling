@@ -41,24 +41,8 @@ export function HeroCarousel() {
 
   return (
     <section className="relative h-[70vh] w-full overflow-hidden mt-16 bg-neutral-900">
-      {/* Blurred background - all preloaded, only current visible */}
-      {heroImages.map((src, index) => (
-        <div
-          key={`bg-${index}`}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            index === currentIndex ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <div
-            className="h-full w-full bg-cover bg-center blur-3xl scale-125"
-            style={{ backgroundImage: `url(${src})` }}
-          />
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
-      ))}
-
       {/* Main images container - all preloaded, simple opacity/transform transition */}
-      <div className="relative h-full w-full flex items-center justify-center px-4">
+      <div className="relative h-full w-full">
         {heroImages.map((src, index) => {
           const isCurrent = index === currentIndex;
           const isPrev =
@@ -84,7 +68,7 @@ export function HeroCarousel() {
           return (
             <div
               key={`img-${index}`}
-              className="absolute h-full transition-all duration-500 ease-out"
+              className="absolute inset-0 transition-all duration-500 ease-out"
               style={{
                 transform,
                 opacity,
@@ -96,8 +80,9 @@ export function HeroCarousel() {
               <img
                 src={src}
                 alt={`Hero slide ${index + 1}`}
-                className="h-full w-auto object-contain"
-                style={{ maxHeight: "100%" }}
+                className={`h-full w-full object-cover ${
+                  index === 0 ? "object-[center_75%]" : ""
+                }`}
                 loading="eager"
               />
             </div>

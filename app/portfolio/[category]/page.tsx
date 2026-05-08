@@ -23,6 +23,14 @@ const categoryLabelMap: Record<string, string> = {
   movie: '영상',
 };
 
+const subtitleMap: Record<string, string> = {
+  food: '신선함과 감성이 담긴 푸드 스타일링을 만나보세요',
+  product: '제품의 가치를 돋보이게 하는 스타일링을 확인해보세요',
+  cosmetics: '아름다움을 완성하는 뷰티 & 코스메틱 스타일링입니다',
+  lifestyle: '일상 속 감각적인 라이프스타일을 구경해보세요',
+  movie: '움직이는 감성, 영상으로 전하는 이야기입니다',
+};
+
 export default function PortfolioCategoryPage() {
   const params = useParams();
   const category = params.category as string;
@@ -48,7 +56,7 @@ export default function PortfolioCategoryPage() {
           <h1 className="font-open-sans text-4xl md:text-6xl font-semibold tracking-tight text-neutral-900 mb-4">
             {categoryLabelMap[category] || 'Portfolio'}
           </h1>
-          <p className="font-sans text-neutral-600">다양한 작품을 만나보세요</p>
+          <p className="font-sans text-neutral-600">{subtitleMap[category] || '다양한 작품을 만나보세요'}</p>
         </section>
         
         {/* Grid */}

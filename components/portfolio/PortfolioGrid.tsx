@@ -1,8 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { PortfolioItem } from '@/types/portfolio';
 import Image from 'next/image';
+import { ImageIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const ITEMS_PER_PAGE = 12;
 
 interface Props {
   category: string;
@@ -58,20 +62,26 @@ const sampleItems: PortfolioItem[] = [
 ];
 
 export function PortfolioGrid({ category, onSelect }: Props) {
+  const [currentPage, setCurrentPage] = useState(1);
   const items = sampleItems.filter((item) => item.category === category);
+
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-6 py-12 text-center">
-        <p className="text-neutral-500">등록된 포트폴리오가 없습니다.</p>
+      <div className="container mx-auto px-6 min-h-[800px] flex flex-col items-center justify-center text-center">
+        <ImageIcon className="w-12 h-12 text-neutral-300 mb-4" />
+        <p className="text-neutral-400 font-sans">등록된 포트폴리오가 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-6 py-12">
+    <div className="container mx-auto px-6 py-12 min-h-[800px]">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {items.map((item, index) => (
+        {currentItems.map((item, index) => (
           <motion.div
             key={item.id}
             initial={{ opacity: 0, y: 20 }}
@@ -90,11 +100,44 @@ export function PortfolioGrid({ category, onSelect }: Props) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              <h3 className="text-white font-serif text-lg">{item.title}</h3>
-              <p className="text-white/80 text-sm">{item.date}</p>
+              <h3 className="text-white font-sans text-lg">{item.title}</h3>
+              <p className="text-white/80 font-sans text-sm">{item.date}</p>
             </div>
           </motion.div>
         ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex items-center justify-center gap-1 mt-12">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="w-9 h-9 rounded-md flex items-center justify-center text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          aria-label="Previous page"
+        >
+          <ChevronLeft size={18} />
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => setCurrentPage(page)}
+            className={`w-9 h-9 rounded-md flex items-center justify-center text-sm font-sans transition-colors ${
+              page === currentPage
+                ? 'bg-accent/80 text-white'
+                : 'text-neutral-400/60 hover:text-neutral-500 hover:bg-neutral-100/50'
+            }`}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="w-9 h-9 rounded-md flex items-center justify-center text-neutral-500 hover:text-neutral-700 hover:bg-neutral-100/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          aria-label="Next page"
+        >
+          <ChevronRight size={18} />
+        </button>
       </div>
     </div>
   );
