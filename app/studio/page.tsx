@@ -2,6 +2,7 @@
 
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { NaverMap } from "@/components/studio/NaverMap";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -21,7 +22,7 @@ const images = [
     className: "aspect-[3/2]",
     caption: ["모하 스튜디오", "공간 "],
   },
-  { src: Studio3, alt: "Studio 3", className: "md:row-span-2 aspect-[2/3]" },
+  { src: Studio3, alt: "Studio 3", className: "md:row-span-2 aspect-[2/3] md:aspect-auto md:h-full" },
   { src: Studio4, alt: "Studio 4", className: "aspect-[4/3]" },
   { src: Studio5, alt: "Studio 5", className: "aspect-[4/3]" },
   { src: Studio6, alt: "Studio 6", className: "aspect-[4/3]" },
@@ -44,7 +45,7 @@ export default function StudioPage() {
         </section>
 
         {/* Image Grid */}
-        <div className="container mx-auto px-6 pb-24">
+        <div className="container mx-auto px-6 pb-12">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
             {images.map((image, index) => (
               <motion.div
@@ -76,7 +77,7 @@ export default function StudioPage() {
                       {image.caption.map((line, i) => (
                         <p
                           key={i}
-                          className="font-sans font-semibold text-4xl text-neutral-800"
+                          className="font-sans font-semibold text-4xl text-neutral-800 max-md:text-2xl"
                         >
                           {line}
                         </p>
@@ -87,6 +88,11 @@ export default function StudioPage() {
               </motion.div>
             ))}
           </div>
+        </div>
+
+        {/* Map */}
+        <div className="container mx-auto px-6 pb-24">
+          <NaverMap />
         </div>
       </main>
       <Footer />

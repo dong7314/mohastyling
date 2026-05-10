@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum PortfolioCategory {
+  food
+  product
+  cosmetics
+  lifestyle
+  movie
+  all_in_one
+}
+
+model Portfolio {
+  id          String          @id @default(cuid())
+  title       String
+  description String          @default("")
+  date        String
+  category    PortfolioCategory
+  mainImage   String          @default("")
+  videoUrl    String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  images      PortfolioImage[]
+
+  @@map("portfolios")
+}
+
+model PortfolioImage {
+  id          String   @id @default(cuid())
+  portfolioId String
+  imageUrl    String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@map("portfolio_images")
+}

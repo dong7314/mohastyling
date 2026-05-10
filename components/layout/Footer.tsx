@@ -29,7 +29,7 @@ export function Footer() {
           </div>
           <div className="flex gap-4">
             <a
-              href="https://instagram.com/mohastyling"
+              href="https://www.instagram.com/studio.moha_?igsh=MWZta3FxM2JtcXVjdA%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center hover:bg-accent hover:border-accent transition-all"

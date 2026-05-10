@@ -11,10 +11,17 @@ interface Props {
   onClose: () => void;
 }
 
+function getYouTubeEmbedUrl(url: string): string {
+  const match = url.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+}
+
 export function PortfolioModal({ item, onClose }: Props) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const allImages = [item.mainImage, ...item.images];
+  const allImages = item.images.length > 0 ? item.images : item.mainImage ? [item.mainImage] : [];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
@@ -46,20 +53,22 @@ export function PortfolioModal({ item, onClose }: Props) {
             <span className="text-neutral-300">·</span>
             <span className="inline-block px-2.5 py-0.5 bg-accent/20 text-accent rounded-full text-xs">
               {item.category === 'food' && '푸드'}
-              {item.category === 'beauty' && '뷰티'}
               {item.category === 'product' && '제품'}
-              {item.category === 'video' && '영상'}
+              {item.category === 'cosmetics' && '코스메틱'}
+              {item.category === 'lifestyle' && '라이프스타일'}
+              {item.category === 'movie' && '영상'}
+              {item.category === 'all-in-one' && 'All in One'}
             </span>
             <span className="text-neutral-300">·</span>
             <p className="text-neutral-500 text-sm">{item.date}</p>
-            <button
-              onClick={onClose}
-              className="ml-auto w-8 h-8 rounded-full text-neutral-400 flex items-center justify-center hover:bg-neutral-100 hover:text-neutral-600 transition-colors"
-              aria-label="Close"
-            >
-              <X size={20} />
-            </button>
           </div>
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 transition-colors z-10"
+            aria-label="Close"
+          >
+            <X size={24} />
+          </button>
 
           {/* Image gallery */}
           <div className="relative flex-1 min-h-[500px] bg-neutral-100">
@@ -103,6 +112,21 @@ export function PortfolioModal({ item, onClose }: Props) {
               </>
             )}
           </div>
+
+          {/* YouTube embed for movie category */}
+          {item.videoUrl && (
+            <div className="w-full">
+              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                <iframe
+                  src={getYouTubeEmbedUrl(item.videoUrl)}
+                  title={`${item.title} video`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute top-0 left-0 w-full h-full"
+                />
+              </div>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>

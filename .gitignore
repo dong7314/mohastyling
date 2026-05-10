@@ -40,3 +40,5 @@ next-env.d.ts
 # claude 
 CLAUDE.md
 /.claude
+/lib/generated/prisma
+dev.db

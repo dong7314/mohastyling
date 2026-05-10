@@ -3,7 +3,7 @@ export interface PortfolioItem {
   title: string;
   description: string;
   date: string;
-  category: 'food' | 'beauty' | 'product' | 'video';
+  category: 'food' | 'product' | 'cosmetics' | 'lifestyle' | 'movie' | 'all-in-one';
   mainImage: string;
   images: string[];
   videoUrl?: string;

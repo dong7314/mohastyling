@@ -9,18 +9,21 @@ import { PortfolioItem, PortfolioCategory, CategoryTab } from '@/types/portfolio
 import { useParams } from 'next/navigation';
 
 const categories: CategoryTab[] = [
-  { value: 'food', label: '푸드' },
-  { value: 'beauty', label: '뷰티' },
-  { value: 'product', label: '제품' },
-  { value: 'video', label: '영상' },
+  { value: 'food', label: 'Food' },
+  { value: 'cosmetics', label: 'Cosmetics' },
+  { value: 'product', label: 'Product' },
+  { value: 'movie', label: 'Movie' },
+  { value: 'lifestyle', label: 'Life Style' },
+  { value: 'all-in-one', label: 'All in One' },
 ];
 
 const categoryLabelMap: Record<string, string> = {
-  food: '푸드',
-  product: '제품',
-  cosmetics: '코스메틱',
-  lifestyle: '라이프스타일',
-  movie: '영상',
+  food: 'Food',
+  product: 'Product',
+  cosmetics: 'Cosmetics',
+  lifestyle: 'Life Style',
+  movie: 'Movie',
+  'all-in-one': 'All in One',
 };
 
 const subtitleMap: Record<string, string> = {
@@ -29,6 +32,7 @@ const subtitleMap: Record<string, string> = {
   cosmetics: '아름다움을 완성하는 뷰티 & 코스메틱 스타일링입니다',
   lifestyle: '일상 속 감각적인 라이프스타일을 구경해보세요',
   movie: '움직이는 감성, 영상으로 전하는 이야기입니다',
+  'all-in-one': '모든 순간을 스타일링합니다',
 };
 
 export default function PortfolioCategoryPage() {
@@ -36,16 +40,17 @@ export default function PortfolioCategoryPage() {
   const category = params.category as string;
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
 
-  // Map URL category to portfolio category
-  const categoryMap: Record<string, PortfolioCategory> = {
+  // Map URL category to portfolio category (DB uses underscore)
+  const categoryMap: Record<string, string> = {
     food: 'food',
     product: 'product',
-    cosmetics: 'beauty',
-    lifestyle: 'beauty',
-    movie: 'video',
+    cosmetics: 'cosmetics',
+    lifestyle: 'lifestyle',
+    movie: 'movie',
+    'all-in-one': 'all_in_one',
   };
 
-  const selectedCategory = categoryMap[category] || 'food';
+  const selectedCategory = categoryMap[category] || category;
 
   return (
     <div className="min-h-screen bg-white">
