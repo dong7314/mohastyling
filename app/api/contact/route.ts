@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -16,10 +14,25 @@ export async function POST(request: NextRequest) {
     }
 
     const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const contactEmail = process.env.CONTACT_EMAIL;
+
+    if (!resendApiKey || !contactEmail) {
+      console.error('Contact API env missing:', {
+        hasResendApiKey: Boolean(resendApiKey),
+        hasContactEmail: Boolean(contactEmail),
+      });
+      return NextResponse.json(
+        { error: 'Contact email configuration is missing.' },
+        { status: 500 }
+      );
+    }
+
+    const resend = new Resend(resendApiKey);
 
     const { error } = await resend.emails.send({
       from: `Moha Styling <noreply@mohastyling.com>`,
-      to: process.env.CONTACT_EMAIL!,
+      to: contactEmail,
       ...(isEmail && { replyTo: email }),
       subject: `[Moha Styling] 새 문의 - ${name}`,
       html: `
