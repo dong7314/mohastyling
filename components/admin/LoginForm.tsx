@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 interface Props {
-  onLogin: (id: string, password: string) => void;
+  onLogin: (id: string, password: string) => void | Promise<void>;
   error: string;
 }
 

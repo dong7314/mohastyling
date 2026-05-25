@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { uploadImage } from "@/lib/minio";
+import { verifyBasicAuth } from "@/lib/admin-auth";
 
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
+    const authResult = verifyBasicAuth(authHeader);
 
-    const adminId = process.env.ADMIN_ID || "admin";
-    const adminPassword = process.env.ADMIN_PASSWORD || "admin1234";
-    const expectedAuth = `Basic ${btoa(`${adminId}:${adminPassword}`)}`;
+    if (!authResult.configured) {
+      console.error("Admin auth env missing: ADMIN_ID or ADMIN_PASSWORD");
+      return NextResponse.json(
+        { error: "Admin authentication is not configured." },
+        { status: 500 }
+      );
+    }
 
-    if (authHeader !== expectedAuth) {
+    if (!authResult.valid) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

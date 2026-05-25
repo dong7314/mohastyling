@@ -9,13 +9,17 @@ export default function AdminLoginPage() {
   const router = useRouter();
 
   const handleLogin = async (id: string, password: string) => {
-    // Simple client-side check - in production, use server-side auth
-    const adminId = process.env.NEXT_PUBLIC_ADMIN_ID || 'admin';
-    const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin1234';
+    setError('');
 
-    if (id === adminId && password === adminPassword) {
-      // Store auth in sessionStorage (in production, use secure cookies)
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, password }),
+    });
+
+    if (res.ok) {
       sessionStorage.setItem('adminAuth', 'true');
+      sessionStorage.setItem('adminCredentials', btoa(`${id}:${password}`));
       router.push('/admin/dashboard');
     } else {
       setError('아이디 또는 비밀번호가 올바르지 않습니다.');

@@ -53,7 +53,7 @@ export function ProfileCard() {
           >
             <div className="aspect-[3/4] rounded-3xl overflow-hidden bg-neutral-200 shadow-2xl max-w-[440px] mx-auto lg:mx-0">
               <Image
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80"
+                src="/images/profile/profile.jpg"
                 alt="모하 스타일링 프로필"
                 fill
                 className="object-cover rounded-3xl"

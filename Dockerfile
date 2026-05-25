@@ -23,12 +23,8 @@ FROM base AS builder
 WORKDIR /app
 
 ARG DATABASE_URL=file:/tmp/build.db
-ARG NEXT_PUBLIC_ADMIN_ID=admin
-ARG NEXT_PUBLIC_ADMIN_PASSWORD=admin1234
 ARG NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=
 ENV DATABASE_URL=$DATABASE_URL \
-    NEXT_PUBLIC_ADMIN_ID=$NEXT_PUBLIC_ADMIN_ID \
-    NEXT_PUBLIC_ADMIN_PASSWORD=$NEXT_PUBLIC_ADMIN_PASSWORD \
     NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=$NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -44,8 +40,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production \
     PORT=3000 \
-    HOSTNAME=0.0.0.0 \
-    DATABASE_URL=file:/data/dev.db
+    HOSTNAME=0.0.0.0
 
 RUN groupadd --system --gid 1001 nodejs \
   && useradd --system --uid 1001 --gid nodejs nextjs \

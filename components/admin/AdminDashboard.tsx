@@ -38,9 +38,8 @@ interface Portfolio {
 }
 
 function getAuthHeader(): string {
-  const id = sessionStorage.getItem("adminId") || "admin";
-  const pw = sessionStorage.getItem("adminPw") || "admin1234";
-  return `Basic ${btoa(`${id}:${pw}`)}`;
+  const credentials = sessionStorage.getItem("adminCredentials");
+  return credentials ? `Basic ${credentials}` : "";
 }
 
 export default function AdminDashboard() {
@@ -88,6 +87,9 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("adminAuth");
+    sessionStorage.removeItem("adminCredentials");
+    sessionStorage.removeItem("adminId");
+    sessionStorage.removeItem("adminPw");
     router.push("/admin/login");
   };
 

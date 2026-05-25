@@ -179,10 +179,11 @@ export function PortfolioFormModal({
         const formData = new FormData();
         newFiles.forEach((img) => formData.append("files", img.file));
 
-        const adminId = process.env.NEXT_PUBLIC_ADMIN_ID || "admin";
-        const adminPassword =
-          process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin1234";
-        const auth = btoa(`${adminId}:${adminPassword}`);
+        const auth = sessionStorage.getItem("adminCredentials");
+
+        if (!auth) {
+          throw new Error("Missing admin credentials");
+        }
 
         const res = await fetch("/api/upload", {
           method: "POST",

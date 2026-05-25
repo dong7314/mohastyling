@@ -1,14 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { deleteImage } from "@/lib/minio";
+import { verifyBasicAuth } from "@/lib/admin-auth";
 
 function checkAuth(request: NextRequest): NextResponse | null {
   const authHeader = request.headers.get("authorization");
-  const adminId = process.env.ADMIN_ID || "admin";
-  const adminPassword = process.env.ADMIN_PASSWORD || "admin1234";
-  const expectedAuth = `Basic ${btoa(`${adminId}:${adminPassword}`)}`;
+  const result = verifyBasicAuth(authHeader);
 
-  if (authHeader !== expectedAuth) {
+  if (!result.configured) {
+    console.error("Admin auth env missing: ADMIN_ID or ADMIN_PASSWORD");
+    return NextResponse.json(
+      { error: "Admin authentication is not configured." },
+      { status: 500 }
+    );
+  }
+
+  if (!result.valid) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   return null;
