@@ -23,7 +23,6 @@ model Portfolio {
   date        String
   category    PortfolioCategory
   mainImage   String          @default("")
-  videoUrl    String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   images      PortfolioImage[]
@@ -35,6 +34,7 @@ model PortfolioImage {
   id          String   @id @default(cuid())
   portfolioId String
   imageUrl    String
+  videoUrl    String?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)

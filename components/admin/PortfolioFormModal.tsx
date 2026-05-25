@@ -35,6 +35,7 @@ interface ExistingImage {
   url: string;
   order: number;
   preview: string;
+  videoUrl?: string;
 }
 
 interface NewImage {
@@ -42,6 +43,7 @@ interface NewImage {
   file: File;
   order: number;
   preview: string;
+  videoUrl?: string;
 }
 
 type ImageItem = ExistingImage | NewImage;
@@ -55,8 +57,7 @@ interface PortfolioFormModalProps {
     date: string;
     category: PortfolioCategory;
     mainImage: string;
-    images: { url: string; order: number }[];
-    videoUrl?: string;
+    images: { url: string; order: number; videoUrl?: string }[];
   }) => Promise<void>;
   editData?: {
     id: string;
@@ -65,8 +66,7 @@ interface PortfolioFormModalProps {
     date: string;
     category: PortfolioCategory;
     mainImage: string;
-    images: { url: string; order: number }[];
-    videoUrl?: string;
+    images: { url: string; order: number; videoUrl?: string }[];
   };
 }
 
@@ -84,13 +84,13 @@ export function PortfolioFormModal({
   const [category, setCategory] = useState<PortfolioCategory>(
     editData?.category || "food"
   );
-  const [videoUrl, setVideoUrl] = useState(editData?.videoUrl || "");
   const [images, setImages] = useState<ImageItem[]>(
     editData?.images.map((img) => ({
       kind: "existing" as const,
       url: img.url,
       order: img.order,
       preview: img.url,
+      videoUrl: img.videoUrl || "",
     })) || []
   );
   const [mainImageIndex, setMainImageIndex] = useState(
@@ -106,7 +106,6 @@ export function PortfolioFormModal({
     setDescription("");
     setDate(new Date());
     setCategory("food");
-    setVideoUrl("");
     setImages([]);
     setMainImageIndex(0);
   };
@@ -161,14 +160,14 @@ export function PortfolioFormModal({
 
     setIsSubmitting(true);
     try {
-      const allImageUrls: { url: string; order: number }[] = [];
+      const allImageUrls: { url: string; order: number; videoUrl?: string }[] = [];
 
       for (let i = 0; i < images.length; i++) {
         const img = images[i];
         if (img.kind === "existing") {
-          allImageUrls.push({ url: img.url, order: i });
+          allImageUrls.push({ url: img.url, order: i, videoUrl: img.videoUrl || undefined });
         } else {
-          allImageUrls.push({ url: "", order: i }); // placeholder
+          allImageUrls.push({ url: "", order: i, videoUrl: img.videoUrl || undefined }); // placeholder
         }
       }
 
@@ -197,7 +196,7 @@ export function PortfolioFormModal({
         let urlIndex = 0;
         for (let i = 0; i < allImageUrls.length; i++) {
           if (allImageUrls[i].url === "") {
-            allImageUrls[i] = { url: data.urls[urlIndex], order: i };
+            allImageUrls[i] = { url: data.urls[urlIndex], order: i, videoUrl: allImageUrls[i].videoUrl };
             urlIndex++;
           }
         }
@@ -210,7 +209,6 @@ export function PortfolioFormModal({
         category,
         mainImage: allImageUrls[mainImageIndex]?.url || "",
         images: allImageUrls,
-        videoUrl: videoUrl.trim() || undefined,
       });
       handleClose();
     } catch (err) {
@@ -346,22 +344,6 @@ export function PortfolioFormModal({
                 />
               </div>
 
-              {/* Video URL - only for movie category */}
-              {category === "movie" && (
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">
-                    영상 URL (선택)
-                  </label>
-                  <input
-                    type="url"
-                    value={videoUrl}
-                    onChange={(e) => setVideoUrl(e.target.value)}
-                    placeholder="https://youtube.com/..."
-                    className="w-full px-4 py-3 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
-                  />
-                </div>
-              )}
-
               {/* Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
@@ -406,44 +388,59 @@ export function PortfolioFormModal({
                 {images.length > 0 && (
                   <div className="mt-4 grid grid-cols-4 gap-3">
                     {images.map((img, index) => (
-                      <div
-                        key={img.preview}
-                        className={`relative aspect-square rounded-lg overflow-hidden group border-2 transition-all ${
-                          mainImageIndex === index
-                            ? "border-accent"
-                            : "border-transparent"
-                        }`}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={img.preview}
-                          alt={`이미지 ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
-                          <button
-                            onClick={() => setMainImageIndex(index)}
-                            className={`p-1.5 rounded-full transition-colors ${
-                              mainImageIndex === index
-                                ? "bg-accent text-white"
-                                : "bg-white/90 text-neutral-700 hover:bg-accent hover:text-white"
-                            }`}
-                            title="메인 이미지로 설정"
-                          >
-                            <Star size={14} />
-                          </button>
-                          <button
-                            onClick={() => removeImage(index)}
-                            className="p-1.5 rounded-full bg-white/90 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
-                            title="삭제"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                        {mainImageIndex === index && (
-                          <div className="absolute top-1 left-1 bg-accent text-white px-1.5 py-0.5 rounded text-[10px]">
-                            메인
+                      <div key={img.preview}>
+                        <div
+                          className={`relative aspect-square rounded-lg overflow-hidden group border-2 transition-all ${
+                            mainImageIndex === index
+                              ? "border-accent"
+                              : "border-transparent"
+                          }`}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={img.preview}
+                            alt={`이미지 ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
+                            <button
+                              onClick={() => setMainImageIndex(index)}
+                              className={`p-1.5 rounded-full transition-colors ${
+                                mainImageIndex === index
+                                  ? "bg-accent text-white"
+                                  : "bg-white/90 text-neutral-700 hover:bg-accent hover:text-white"
+                              }`}
+                              title="메인 이미지로 설정"
+                            >
+                              <Star size={14} />
+                            </button>
+                            <button
+                              onClick={() => removeImage(index)}
+                              className="p-1.5 rounded-full bg-white/90 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                              title="삭제"
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </div>
+                          {mainImageIndex === index && (
+                            <div className="absolute top-1 left-1 bg-accent text-white px-1.5 py-0.5 rounded text-[10px]">
+                              메인
+                            </div>
+                          )}
+                        </div>
+                        {category === "movie" && (
+                          <input
+                            type="url"
+                            value={img.videoUrl || ""}
+                            onChange={(e) => {
+                              setImages(prev => prev.map((item, i) =>
+                                i === index ? { ...item, videoUrl: e.target.value } : item
+                              ));
+                            }}
+                            placeholder="영상 URL"
+                            className="mt-1 w-full px-2 py-1 text-xs border border-neutral-200 rounded focus:outline-none focus:ring-1 focus:ring-accent/50"
+                            onClick={(e) => e.stopPropagation()}
+                          />
                         )}
                       </div>
                     ))}

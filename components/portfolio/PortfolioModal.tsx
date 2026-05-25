@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { PortfolioItem } from '@/types/portfolio';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -11,17 +11,16 @@ interface Props {
   onClose: () => void;
 }
 
-function getYouTubeEmbedUrl(url: string): string {
-  const match = url.match(
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
-  );
-  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
-}
-
 export function PortfolioModal({ item, onClose }: Props) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const allImages = item.images.length > 0 ? item.images : item.mainImage ? [item.mainImage] : [];
+  const allImages = item.images.length > 0
+    ? item.images.map((img) => img.imageUrl)
+    : item.mainImage ? [item.mainImage] : [];
+
+  const currentVideoUrl = item.images.length > 0
+    ? item.images[currentImageIndex]?.videoUrl
+    : undefined;
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
@@ -111,22 +110,20 @@ export function PortfolioModal({ item, onClose }: Props) {
                 </div>
               </>
             )}
-          </div>
 
-          {/* YouTube embed for movie category */}
-          {item.videoUrl && (
-            <div className="w-full">
-              <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                <iframe
-                  src={getYouTubeEmbedUrl(item.videoUrl)}
-                  title={`${item.title} video`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute top-0 left-0 w-full h-full"
-                />
-              </div>
-            </div>
-          )}
+            {/* Video link for movie category */}
+            {item.category === 'movie' && currentVideoUrl && (
+              <a
+                href={currentVideoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-accent text-white rounded-full text-sm hover:bg-accent-hover transition-colors shadow-lg z-10"
+              >
+                <Play size={16} />
+                영상 보기
+              </a>
+            )}
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>

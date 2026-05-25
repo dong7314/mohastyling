@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import { useState } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
   onClose: () => void;
@@ -11,22 +11,24 @@ interface Props {
 export function ContactModal({ onClose }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
 
     const formData = new FormData(e.currentTarget);
     const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message'),
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
     };
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -35,9 +37,12 @@ export function ContactModal({ onClose }: Props) {
         setTimeout(() => {
           onClose();
         }, 2000);
+      } else {
+        const result = await response.json();
+        setErrorMessage(result.error || "메시지 전송에 실패했습니다.");
       }
-    } catch (error) {
-      console.error('Failed to send message:', error);
+    } catch {
+      setErrorMessage("네트워크 오류가 발생했습니다.");
     } finally {
       setIsSubmitting(false);
     }
@@ -74,20 +79,43 @@ export function ContactModal({ onClose }: Props) {
               className="text-center py-8"
             >
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="w-8 h-8 text-green-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </div>
-              <h3 className="font-serif text-2xl text-neutral-900 mb-2">메시지가 전송되었습니다</h3>
+              <h3
+                className="text-2xl font-semibold text-neutral-900 mb-2"
+                style={{ fontFamily: "var(--font-pretendard)" }}
+              >
+                메시지가 전송되었습니다
+              </h3>
               <p className="text-neutral-600">빠른 시일 내에 답변 드리겠습니다.</p>
             </motion.div>
           ) : (
             <>
-              <h2 className="font-serif text-2xl mb-6 text-neutral-900">문의하기</h2>
+              <h2
+                className="text-2xl font-semibold mb-6 text-neutral-900"
+                style={{ fontFamily: "var(--font-pretendard)" }}
+              >
+                문의하기
+              </h2>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-1 text-neutral-700">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium mb-1 text-neutral-700"
+                  >
                     이름
                   </label>
                   <input
@@ -99,7 +127,10 @@ export function ContactModal({ onClose }: Props) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-neutral-700">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium mb-1 text-neutral-700"
+                  >
                     이메일 또는 전화번호
                   </label>
                   <input
@@ -111,7 +142,10 @@ export function ContactModal({ onClose }: Props) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-1 text-neutral-700">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium mb-1 text-neutral-700"
+                  >
                     메시지
                   </label>
                   <textarea
@@ -123,12 +157,17 @@ export function ContactModal({ onClose }: Props) {
                     className="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all resize-none"
                   />
                 </div>
+
+                {errorMessage && (
+                  <p className="text-sm text-red-500">{errorMessage}</p>
+                )}
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? '전송 중...' : '보내기'}
+                  {isSubmitting ? "전송 중..." : "보내기"}
                 </button>
               </form>
             </>

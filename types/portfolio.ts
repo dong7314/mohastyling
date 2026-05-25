@@ -1,3 +1,8 @@
+export interface PortfolioItemImage {
+  imageUrl: string;
+  videoUrl?: string;
+}
+
 export interface PortfolioItem {
   id: string;
   title: string;
@@ -5,8 +10,7 @@ export interface PortfolioItem {
   date: string;
   category: 'food' | 'product' | 'cosmetics' | 'lifestyle' | 'movie' | 'all-in-one';
   mainImage: string;
-  images: string[];
-  videoUrl?: string;
+  images: PortfolioItemImage[];
   createdAt: Date;
   updatedAt: Date;
 }

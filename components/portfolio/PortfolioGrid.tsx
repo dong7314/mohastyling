@@ -41,10 +41,12 @@ export function PortfolioGrid({ category, onSelect }: Props) {
             date: item.date as string,
             category: item.category as string,
             mainImage: (item.mainImage as string) || "",
-            images: ((item.images as Array<{ imageUrl: string }>) || []).map(
-              (img) => img.imageUrl
+            images: ((item.images as Array<{ imageUrl: string; videoUrl?: string }>) || []).map(
+              (img) => ({
+                imageUrl: img.imageUrl,
+                videoUrl: img.videoUrl || undefined,
+              })
             ),
-            videoUrl: (item.videoUrl as string) || undefined,
             createdAt: new Date(item.createdAt as string),
             updatedAt: new Date(item.updatedAt as string),
           })
@@ -94,7 +96,7 @@ export function PortfolioGrid({ category, onSelect }: Props) {
             className="group relative aspect-[4/5] overflow-hidden rounded-lg cursor-pointer bg-neutral-100"
           >
             <Image
-              src={item.mainImage || item.images[0] || ""}
+              src={item.mainImage || item.images[0]?.imageUrl || ""}
               alt={item.title}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-110"

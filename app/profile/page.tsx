@@ -2,7 +2,6 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroCarousel } from '@/components/home/HeroCarousel';
 import { ProfileCard } from '@/components/profile/ProfileCard';
-import { ContactButton } from '@/components/common/ContactButton';
 
 export default function AboutPage() {
   return (
@@ -13,7 +12,6 @@ export default function AboutPage() {
         <ProfileCard />
       </main>
       <Footer />
-      <ContactButton />
     </div>
   );
 }

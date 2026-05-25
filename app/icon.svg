@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="glass" x1="12" y1="8" x2="52" y2="58">
+      <stop offset="0" stop-color="#fff8ef"/>
+      <stop offset="0.45" stop-color="#f3ebe3"/>
+      <stop offset="1" stop-color="#d7cfc8"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="14" y1="18" x2="51" y2="48">
+      <stop offset="0" stop-color="#f0a082"/>
+      <stop offset="1" stop-color="#e07a5f"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="15" fill="#151311"/>
+  <path
+    d="M17 45 22 19 32 38 42 19 47 45"
+    fill="none"
+    stroke="url(#glass)"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M18 45 22 21"
+    fill="none"
+    stroke="#ffffff"
+    stroke-opacity="0.42"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+  <path
+    d="M18 50H46"
+    fill="none"
+    stroke="url(#accent)"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+</svg>

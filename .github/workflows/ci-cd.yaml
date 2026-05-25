@@ -1,0 +1,64 @@
+name: MohaStyling CI CD
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.HARBOR_REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build & Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.HARBOR_REGISTRY }}/mohastyling/mohastyling:${{ github.sha }}
+
+      - name: Checkout infra-manifests repo
+        uses: actions/checkout@v4
+        with:
+          repository: dong7314/infra-manifests
+          token: ${{ secrets.GH_TOKEN }}
+          path: infra
+
+      - name: Update image tag in deployment.yaml
+        run: |
+          FILE="infra/frontend/mohastyling/deployment.yaml"
+          IMAGE="${{ secrets.HARBOR_REGISTRY }}/mohastyling/mohastyling:${{ github.sha }}"
+
+          sed -i "s|image:.*mohastyling.*|image: $IMAGE|g" $FILE
+
+          echo "--- Updated File Content Check ---"
+          grep "image:" $FILE
+
+      - name: Commit & Push infra-manifests
+        run: |
+          cd infra
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add frontend/mohastyling/deployment.yaml
+
+          git commit -m "[fe-deploy]: mohastyling ${{ github.sha }}" || echo "No changes to commit"
+          git push
+
+      - name: Docker cleanup
+        if: always()
+        run: |
+          docker image prune -af
+          docker builder prune -af

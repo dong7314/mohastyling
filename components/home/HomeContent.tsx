@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroCarousel } from "@/components/home/HeroCarousel";
 import { IntroSection } from "@/components/home/IntroSection";
-import { ContactButton } from "@/components/common/ContactButton";
 
 export function HomeContent() {
   return (
@@ -22,7 +21,6 @@ export function HomeContent() {
           <IntroSection />
         </main>
         <Footer />
-        <ContactButton />
       </div>
     </motion.div>
   );

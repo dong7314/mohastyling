@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Noto_Serif_KR, Open_Sans, Caveat, Geist } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ContactButton } from "@/components/common/ContactButton";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -87,6 +88,11 @@ const pretendard = localFont({
   fallback: ["system-ui", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Moha Styling - Food Stylist Portfolio",
   description: "스튜디오 모하는 고객만을 위한, 그리고 제품의 탄생을 위한 사진으로 진심으로 작업을 진행합니다.",
@@ -99,7 +105,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" data-scroll-behavior="smooth" className={cn(playfair.variable, notoSerif.variable, pretendard.variable, openSans.variable, caveat.variable, "font-sans", geist.variable)}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">{children}<ContactButton /></body>
     </html>
   );
 }

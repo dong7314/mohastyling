@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { title, description, date, category, mainImage, images, videoUrl } = body;
+    const { title, description, date, category, mainImage, images } = body;
 
     const item = await prisma.portfolio.create({
       data: {
@@ -54,11 +54,11 @@ export async function POST(request: NextRequest) {
         date,
         category,
         mainImage: mainImage || "",
-        videoUrl,
         images: {
-          create: (images as { url: string; order: number }[]).map((img) => ({
+          create: (images as { url: string; order: number; videoUrl?: string }[]).map((img) => ({
             imageUrl: img.url,
             order: img.order,
+            videoUrl: img.videoUrl || null,
           })),
         },
       },
@@ -79,7 +79,7 @@ export async function PATCH(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { id, title, description, date, category, mainImage, images, videoUrl } = body;
+    const { id, title, description, date, category, mainImage, images } = body;
 
     if (!id) {
       return NextResponse.json({ error: "Item ID is required" }, { status: 400 });
@@ -96,11 +96,11 @@ export async function PATCH(request: NextRequest) {
         date,
         category,
         mainImage,
-        videoUrl,
         images: {
-          create: (images as { url: string; order: number }[]).map((img) => ({
+          create: (images as { url: string; order: number; videoUrl?: string }[]).map((img) => ({
             imageUrl: img.url,
             order: img.order,
+            videoUrl: img.videoUrl || null,
           })),
         },
       },

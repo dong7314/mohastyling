@@ -1,8 +1,6 @@
 "use client";
 
-import { useRef } from "react";
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -15,163 +13,139 @@ import CosmeticsImage2 from "../../public/images/cosmetics/cosmetics_landing_2.p
 import { ClickIcon } from "./ClickIcon";
 
 export function PortfolioSection() {
-  const ref = useRef(null);
-
   return (
-    <section
-      ref={ref}
-      className="relative h-[1700px] py-16 md:py-40 bg-neutral-50"
-    >
-      <div className="absolute inline-flex flex-col left-[300px] -rotate-6">
-        <Link href="/portfolio/food">
-          <h3 className="text-center mb-10 text-5xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
-            # Food
-            <ClickIcon className="left-[calc(50%-60px)] -top-12" type="left" />
-          </h3>
-        </Link>
-        <motion.div
-          animate={{
-            rotate: [-6, 6, -6],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "backInOut",
-          }}
-        >
-          <Image
-            src={FoodImage}
-            alt="Food portfolio"
-            width={600}
-            height={0}
-            className="h-auto"
-          />
-        </motion.div>
-      </div>
-      <div className="absolute inline-flex flex-col right-[400px]">
-        <Link href="/portfolio/product">
-          <h3 className="text-center mb-10 text-5xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
-            # Product
-            <ClickIcon
-              className="right-[calc(50%-60px)] -top-12"
-              type="right"
-            />
-          </h3>
-        </Link>
-        <div className="flex">
+    <section className="py-16 md:py-40 xl:h-[1600px] bg-neutral-50 overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-20 px-6 min-[1700px]:px-60 min-[1400px]:px-40 min-[1200px]:px-20">
+        {/* Food */}
+        <div className="flex flex-col items-center -rotate-6">
+          <Link href="/portfolio/food">
+            <h3 className="text-center mb-6 md:mb-10 xl:text-5xl md:text-4xl text-3xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
+              # Food
+              <ClickIcon
+                className="left-[calc(50%-60px)] -top-12"
+                type="left"
+              />
+            </h3>
+          </Link>
           <motion.div
-            animate={{
-              y: [0, -30, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "backInOut",
-            }}
+            animate={{ rotate: [-6, 6, -6] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
           >
             <Image
-              src={ProductImage1}
-              alt="Product portfolio1"
-              width={160}
+              src={FoodImage}
+              alt="Food portfolio"
+              width={0}
               height={0}
-              className="h-auto"
-            />
-          </motion.div>
-          <motion.div
-            animate={{
-              y: [0, 30, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "backInOut",
-            }}
-            className="ml-10"
-          >
-            <Image
-              src={ProductImage2}
-              alt="Product portfolio2"
-              width={160}
-              height={0}
-              className="h-auto"
+              sizes="(max-width: 768px) 90vw, 40vw"
+              className="w-full max-w-[350px] md:max-w-[500px] h-auto"
             />
           </motion.div>
         </div>
-      </div>
-      <div className="absolute inline-flex flex-col left-[350px] top-[800px]">
-        <Link href="/portfolio/cosmetics">
-          <h3 className="text-center mb-10 text-5xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
-            # Cosmetics
-            <ClickIcon className="left-[calc(50%-60px)] -top-12" type="left" />
-          </h3>
-        </Link>
-        <div className="flex relative">
-          <motion.div
-            animate={{
-              y: [0, -30, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "backInOut",
-            }}
-          >
-            <Image
-              src={CosmeticsImage1}
-              alt="Cosmetics portfolio1"
-              width={300}
-              height={0}
-              className="h-auto mr-[200px] mt-10"
-            />
-          </motion.div>
-          <motion.div
-            animate={{
-              y: [0, 30, 0],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "backInOut",
-            }}
-            className="absolute right-0 top-[200px]"
-          >
-            <Image
-              src={CosmeticsImage2}
-              alt="Cosmetics portfolio2"
-              width={260}
-              height={0}
-              className="h-auto"
-            />
-          </motion.div>
+
+        {/* Product */}
+        <div className="flex flex-col items-center">
+          <Link href="/portfolio/product">
+            <h3 className="text-center mb-6 md:mb-10 xl:text-5xl md:text-4xl text-3xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
+              # Product
+              <ClickIcon
+                className="right-[calc(50%-60px)] -top-12"
+                type="right"
+              />
+            </h3>
+          </Link>
+          <div className="flex">
+            <motion.div
+              animate={{ y: [0, -30, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
+            >
+              <Image
+                src={ProductImage1}
+                alt="Product portfolio1"
+                width={160}
+                height={0}
+                className="h-auto"
+              />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 30, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
+              className="ml-10"
+            >
+              <Image
+                src={ProductImage2}
+                alt="Product portfolio2"
+                width={160}
+                height={0}
+                className="h-auto"
+              />
+            </motion.div>
+          </div>
         </div>
-      </div>
-      <div className="absolute inline-flex flex-col right-[300px] top-[1050px]">
-        <Link href="/portfolio/lifestyle">
-          <h3 className="text-center mb-10 text-5xl font-sans font-medium rotate-6 hover:text-accent cursor-pointer transition-colors">
-            # Life Style
-            <ClickIcon
-              className="right-[calc(50%-60px)] -top-12"
-              type="right"
-            />
-          </h3>
-        </Link>
-        <div className="flex relative">
+
+        {/* Cosmetics */}
+        <div className="flex flex-col items-center">
+          <Link href="/portfolio/cosmetics">
+            <h3 className="text-center mb-6 md:mb-10 xl:text-5xl md:text-4xl text-3xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
+              # Cosmetics
+              <ClickIcon
+                className="left-[calc(50%-60px)] -top-12"
+                type="left"
+              />
+            </h3>
+          </Link>
+          <div className="flex relative justify-center">
+            <motion.div
+              animate={{ y: [0, -30, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
+            >
+              <Image
+                src={CosmeticsImage1}
+                alt="Cosmetics portfolio1"
+                width={0}
+                height={0}
+                sizes="300px"
+                className="w-[75%] max-w-[300px] h-auto mr-10 md:mr-[200px] mt-6 md:mt-10"
+              />
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 30, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
+              className="mt-[200px] -ml-[35%]"
+            >
+              <Image
+                src={CosmeticsImage2}
+                alt="Cosmetics portfolio2"
+                width={0}
+                height={0}
+                sizes="260px"
+                className="w-[100%] max-w-[250px] h-auto"
+              />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Life Style */}
+        <div className="flex flex-col items-center rotate-6">
+          <Link href="/portfolio/lifestyle">
+            <h3 className="text-center mb-6 md:mb-10 md:text-4xl xl:text-5xl text-3xl font-sans font-medium hover:text-accent cursor-pointer transition-colors">
+              # Life Style
+              <ClickIcon
+                className="right-[calc(50%-60px)] -top-12"
+                type="right"
+              />
+            </h3>
+          </Link>
           <motion.div
-            animate={{
-              rotate: [-6, 6, -6],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "backInOut",
-            }}
+            animate={{ rotate: [-6, 6, -6] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
           >
             <Image
               src={LifeStyleImage}
               alt="LifeStyle portfolio1"
-              width={550}
+              width={0}
               height={0}
-              className="h-auto"
+              sizes="(max-width: 768px) 90vw, 40vw"
+              className="w-full max-w-[320px] md:max-w-[450px] h-auto"
             />
           </motion.div>
         </div>

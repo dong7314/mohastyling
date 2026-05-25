@@ -20,6 +20,7 @@ const categories: { value: PortfolioCategory; label: string }[] = [
 interface PortfolioImage {
   id: string;
   imageUrl: string;
+  videoUrl?: string | null;
   order: number;
 }
 
@@ -96,8 +97,7 @@ export default function AdminDashboard() {
     date: string;
     category: PortfolioCategory;
     mainImage: string;
-    images: { url: string; order: number }[];
-    videoUrl?: string;
+    images: { url: string; order: number; videoUrl?: string }[];
   }) => {
     const res = await fetch("/api/portfolio", {
       method: "POST",
@@ -117,8 +117,7 @@ export default function AdminDashboard() {
     date: string;
     category: PortfolioCategory;
     mainImage: string;
-    images: { url: string; order: number }[];
-    videoUrl?: string;
+    images: { url: string; order: number; videoUrl?: string }[];
   }) => {
     if (!editData) return;
     const res = await fetch("/api/portfolio", {
@@ -282,8 +281,8 @@ export default function AdminDashboard() {
                 images: editData.images.map((img) => ({
                   url: img.imageUrl,
                   order: img.order,
+                  videoUrl: img.videoUrl || undefined,
                 })),
-                videoUrl: editData.videoUrl || undefined,
               }
             : undefined
         }
