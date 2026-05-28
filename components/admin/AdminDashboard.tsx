@@ -1,12 +1,22 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Plus, Pencil, Trash2, LogOut, ImageIcon } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ImageIcon,
+  LogOut,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import Image from "next/image";
 import { PortfolioCategory } from "@/types/portfolio";
 import { PortfolioFormModal } from "@/components/admin/PortfolioFormModal";
-import Image from "next/image";
+
+const ITEMS_PER_PAGE = 12;
 
 const categories: { value: PortfolioCategory; label: string }[] = [
   { value: "food", label: "food" },
@@ -31,7 +41,7 @@ interface Portfolio {
   date: string;
   category: string;
   mainImage: string;
-  videoUrl: string | null;
+  videoUrl?: string | null;
   images: PortfolioImage[];
   createdAt: string;
   updatedAt: string;
@@ -42,48 +52,75 @@ function getAuthHeader(): string {
   return credentials ? `Basic ${credentials}` : "";
 }
 
+function toApiCategory(category: PortfolioCategory): string {
+  return category.replace("-", "_");
+}
+
+function fromApiCategory(category: string): PortfolioCategory {
+  return category === "all_in_one"
+    ? "all-in-one"
+    : (category as PortfolioCategory);
+}
+
 export default function AdminDashboard() {
   const router = useRouter();
   const [items, setItems] = useState<Portfolio[]>([]);
   const [selectedCategory, setSelectedCategory] =
     useState<PortfolioCategory>("food");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editData, setEditData] = useState<Portfolio | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  const isAuthenticated = !!sessionStorage.getItem("adminAuth");
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    const authenticated = sessionStorage.getItem("adminAuth") === "true";
+    setIsAuthenticated(authenticated);
+    setAuthChecked(true);
+
+    if (!authenticated) {
       router.push("/admin/login");
     }
-  }, [router, isAuthenticated]);
+  }, [router]);
 
   const fetchItems = useCallback(async () => {
+    setIsLoading(true);
+
     try {
-      const res = await fetch("/api/portfolio");
-      if (res.ok) {
-        const data = await res.json();
-        setItems(data.items || data);
+      const params = new URLSearchParams({
+        category: toApiCategory(selectedCategory),
+        page: String(currentPage),
+        limit: String(ITEMS_PER_PAGE),
+      });
+      const res = await fetch(`/api/portfolio?${params.toString()}`);
+
+      if (!res.ok) {
+        setItems([]);
+        setTotalItems(0);
+        return;
       }
+
+      const data = await res.json();
+      setItems(data.items || []);
+      setTotalItems(data.total || 0);
     } catch (err) {
       console.error("Fetch error:", err);
+      setItems([]);
+      setTotalItems(0);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [currentPage, selectedCategory]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      fetch("/api/portfolio")
-        .then((res) => (res.ok ? res.json() : { items: [] }))
-        .then((data) => {
-          setItems(data.items || data);
-          setIsLoading(false);
-        })
-        .catch(() => setIsLoading(false));
+      fetchItems();
     }
-  }, [isAuthenticated]);
+  }, [fetchItems, isAuthenticated]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("adminAuth");
@@ -91,6 +128,11 @@ export default function AdminDashboard() {
     sessionStorage.removeItem("adminId");
     sessionStorage.removeItem("adminPw");
     router.push("/admin/login");
+  };
+
+  const handleCategoryChange = (category: PortfolioCategory) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
   };
 
   const handleCreate = async (data: {
@@ -109,8 +151,14 @@ export default function AdminDashboard() {
       },
       body: JSON.stringify(data),
     });
+
     if (!res.ok) throw new Error("Failed to create");
-    await fetchItems();
+
+    if (currentPage === 1) {
+      await fetchItems();
+    } else {
+      setCurrentPage(1);
+    }
   };
 
   const handleUpdate = async (data: {
@@ -122,6 +170,7 @@ export default function AdminDashboard() {
     images: { url: string; order: number; videoUrl?: string }[];
   }) => {
     if (!editData) return;
+
     const res = await fetch("/api/portfolio", {
       method: "PATCH",
       headers: {
@@ -130,31 +179,34 @@ export default function AdminDashboard() {
       },
       body: JSON.stringify({ ...data, id: editData.id }),
     });
+
     if (!res.ok) throw new Error("Failed to update");
+
     setEditData(null);
     await fetchItems();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("정말 삭제하시겠습니까?")) return;
+
     const res = await fetch(`/api/portfolio?id=${id}`, {
       method: "DELETE",
       headers: { Authorization: getAuthHeader() },
     });
+
     if (!res.ok) {
       alert("삭제에 실패했습니다.");
       return;
     }
-    await fetchItems();
+
+    if (items.length === 1 && currentPage > 1) {
+      setCurrentPage((page) => page - 1);
+    } else {
+      await fetchItems();
+    }
   };
 
-  if (!isAuthenticated) return null;
-
-  const filteredItems = items.filter(
-    (item) =>
-      item.category === selectedCategory ||
-      item.category === selectedCategory.replace("-", "_"),
-  );
+  if (!authChecked || !isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-neutral-100">
@@ -178,7 +230,7 @@ export default function AdminDashboard() {
           {categories.map((cat) => (
             <button
               key={cat.value}
-              onClick={() => setSelectedCategory(cat.value)}
+              onClick={() => handleCategoryChange(cat.value)}
               className={`px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
                 selectedCategory === cat.value
                   ? "bg-accent text-white"
@@ -207,12 +259,14 @@ export default function AdminDashboard() {
             <div className="text-center py-12 bg-white rounded-lg">
               <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
             </div>
-          ) : filteredItems.length === 0 ? (
+          ) : items.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-lg">
-              <p className="text-neutral-500">등록된 포트폴리오가 없습니다.</p>
+              <p className="text-neutral-500">
+                등록된 포트폴리오가 없습니다.
+              </p>
             </div>
           ) : (
-            filteredItems.map((item) => (
+            items.map((item) => (
               <motion.div
                 key={item.id}
                 layout
@@ -247,12 +301,14 @@ export default function AdminDashboard() {
                       setIsModalOpen(true);
                     }}
                     className="p-2 text-neutral-600 hover:text-accent transition-colors"
+                    aria-label="수정"
                   >
                     <Pencil size={18} />
                   </button>
                   <button
                     onClick={() => handleDelete(item.id)}
                     className="p-2 text-neutral-600 hover:text-red-500 transition-colors"
+                    aria-label="삭제"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -261,6 +317,49 @@ export default function AdminDashboard() {
             ))
           )}
         </div>
+
+        {!isLoading && totalPages > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+              className="flex size-9 items-center justify-center rounded-lg bg-white text-neutral-700 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="이전 페이지"
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+              (page) => (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(page)}
+                  className={`size-9 rounded-lg text-sm font-medium transition-colors ${
+                    page === currentPage
+                      ? "bg-accent text-white"
+                      : "bg-white text-neutral-700 hover:bg-neutral-200"
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={() =>
+                setCurrentPage((page) => Math.min(totalPages, page + 1))
+              }
+              disabled={currentPage === totalPages}
+              className="flex size-9 items-center justify-center rounded-lg bg-white text-neutral-700 transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="다음 페이지"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        )}
       </main>
 
       <PortfolioFormModal
@@ -278,7 +377,7 @@ export default function AdminDashboard() {
                 title: editData.title,
                 description: editData.description,
                 date: editData.date,
-                category: editData.category as PortfolioCategory,
+                category: fromApiCategory(editData.category),
                 mainImage: editData.mainImage,
                 images: editData.images.map((img) => ({
                   url: img.imageUrl,

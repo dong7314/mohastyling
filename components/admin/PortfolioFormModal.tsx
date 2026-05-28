@@ -30,6 +30,8 @@ const categories: { value: PortfolioCategory; label: string }[] = [
   { value: "all-in-one", label: "all in one" },
 ];
 
+const MAX_IMAGE_FILE_SIZE = 10 * 1024 * 1024;
+
 interface ExistingImage {
   kind: "existing";
   url: string;
@@ -116,7 +118,22 @@ export function PortfolioFormModal({
   };
 
   const addFiles = (files: FileList | File[]) => {
-    const newImages: ImageItem[] = Array.from(files).map((file, i) => ({
+    const selectedFiles = Array.from(files);
+    const oversizedFiles = selectedFiles.filter(
+      (file) => file.size > MAX_IMAGE_FILE_SIZE
+    );
+
+    if (oversizedFiles.length > 0) {
+      alert("포트폴리오 사진은 10MB 이하로 업로드해주세요.");
+    }
+
+    const validFiles = selectedFiles.filter(
+      (file) => file.size <= MAX_IMAGE_FILE_SIZE
+    );
+
+    if (validFiles.length === 0) return;
+
+    const newImages: ImageItem[] = validFiles.map((file, i) => ({
       kind: "new" as const,
       file,
       order: images.length + i,

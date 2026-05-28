@@ -87,7 +87,7 @@ export function LoginForm({ onLogin, error }: Props) {
         </button>
 
         <Link
-          href="/home"
+          href="/portfolio"
           className="block text-center text-sm text-neutral-400 hover:text-neutral-600 transition-colors mt-4"
         >
           &lt;&nbsp; 홈으로 돌아가기

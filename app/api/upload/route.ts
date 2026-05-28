@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { uploadImage } from "@/lib/minio";
 import { verifyBasicAuth } from "@/lib/admin-auth";
 
+const MAX_UPLOAD_FILE_SIZE = 10 * 1024 * 1024;
+
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
@@ -24,6 +26,15 @@ export async function POST(request: NextRequest) {
 
     if (files.length === 0) {
       return NextResponse.json({ error: "No files provided" }, { status: 400 });
+    }
+
+    const oversizedFile = files.find((file) => file.size > MAX_UPLOAD_FILE_SIZE);
+
+    if (oversizedFile) {
+      return NextResponse.json(
+        { error: "포트폴리오 사진은 10MB 이하로 업로드해주세요." },
+        { status: 413 }
+      );
     }
 
     const urls = await Promise.all(files.map((file) => uploadImage(file)));

@@ -3,24 +3,42 @@
 import { useState, useEffect } from 'react';
 import { Mail, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import { ContactModal } from './ContactModal';
 
 export function ContactButton() {
+  const pathname = usePathname();
   const [showModal, setShowModal] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const shouldHide = pathname === '/' || pathname?.startsWith('/admin');
 
   useEffect(() => {
+    if (shouldHide) {
+      setShowScrollTop(false);
+      return;
+    }
+
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 400);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [shouldHide]);
+
+  useEffect(() => {
+    if (shouldHide) {
+      setShowModal(false);
+    }
+  }, [shouldHide]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  if (shouldHide) {
+    return null;
+  }
 
   return (
     <>

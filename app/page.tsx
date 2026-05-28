@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { RippleBackground } from '@/components/landing/RippleBackground';
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { RippleBackground } from "@/components/landing/RippleBackground";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function LandingPage() {
   const handleClick = () => {
     setIsExiting(true);
     setTimeout(() => {
-      router.push('/home');
+      router.push("/portfolio");
     }, 1000);
   };
 
@@ -25,7 +25,7 @@ export default function LandingPage() {
           style={{ zIndex: 1 }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           <RippleBackground />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -40,12 +40,16 @@ export default function LandingPage() {
                 className="font-open-sans text-7xl md:text-9xl font-normal text-neutral-800 tracking-[3px]"
                 animate={{
                   textShadow: [
-                    '0 0 20px rgba(255,255,255,0.8)',
-                    '0 0 40px rgba(255,255,255,1)',
-                    '0 0 20px rgba(255,255,255,0.8)',
+                    "0 0 20px rgba(255,255,255,0.8)",
+                    "0 0 40px rgba(255,255,255,1)",
+                    "0 0 20px rgba(255,255,255,0.8)",
                   ],
                 }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 Moha Styling
               </motion.h1>
@@ -56,12 +60,24 @@ export default function LandingPage() {
                 exit={{ opacity: 0 }}
                 className="w-full mt-5 text-left text-sm "
               >
-                <span className="text-neutral-600 tracking-[0.15em] ml-1">Food</span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">product</span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">cosmetics</span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">life</span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">style</span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">movie</span>
+                <span className="text-neutral-600 tracking-[0.15em] ml-1">
+                  Food
+                </span>
+                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                  product
+                </span>
+                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                  cosmetics
+                </span>
+                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                  life
+                </span>
+                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                  style
+                </span>
+                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                  movie
+                </span>
               </motion.p>
             </motion.div>
           </div>

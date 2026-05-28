@@ -21,10 +21,14 @@ function checkAuth(request: NextRequest): NextResponse | null {
   return null;
 }
 
+function normalizeCategory(category: string | null | undefined) {
+  return category?.replace("-", "_");
+}
+
 // GET - Fetch portfolio items
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const category = searchParams.get("category");
+  const category = normalizeCategory(searchParams.get("category"));
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "12");
   const skip = (page - 1) * limit;
@@ -59,7 +63,7 @@ export async function POST(request: NextRequest) {
         title,
         description: description || "",
         date,
-        category,
+        category: normalizeCategory(category) as never,
         mainImage: mainImage || "",
         images: {
           create: (images as { url: string; order: number; videoUrl?: string }[]).map((img) => ({
@@ -101,7 +105,7 @@ export async function PATCH(request: NextRequest) {
         title,
         description,
         date,
-        category,
+        category: normalizeCategory(category) as never,
         mainImage,
         images: {
           create: (images as { url: string; order: number; videoUrl?: string }[]).map((img) => ({
