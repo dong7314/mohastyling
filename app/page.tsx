@@ -58,24 +58,21 @@ export default function LandingPage() {
                 animate={{ opacity: 0.6 }}
                 transition={{ delay: 1, duration: 1 }}
                 exit={{ opacity: 0 }}
-                className="w-full mt-5 text-left text-sm "
+                className="mx-auto mt-5 flex max-w-[min(84vw,310px)] flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 text-center text-[11px] uppercase leading-relaxed sm:max-w-[620px] sm:gap-x-4 sm:text-xs min-[1001px]:mt-6 min-[1001px]:max-w-none min-[1001px]:flex-nowrap min-[1001px]:justify-start min-[1001px]:gap-x-5 min-[1001px]:px-0 min-[1001px]:text-left min-[1001px]:text-sm"
               >
-                <span className="text-neutral-600 tracking-[0.15em] ml-1">
+                <span className="text-neutral-600 tracking-[0.16em] sm:tracking-[0.18em]">
                   Food
                 </span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                <span className="text-neutral-600 tracking-[0.16em] sm:tracking-[0.18em]">
                   product
                 </span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                <span className="text-neutral-600 tracking-[0.16em] sm:tracking-[0.18em]">
                   cosmetics
                 </span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">
-                  life
+                <span className="text-neutral-600 tracking-[0.16em] sm:tracking-[0.18em]">
+                  life style
                 </span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">
-                  style
-                </span>
-                <span className="text-neutral-600 tracking-[0.15em] ml-2">
+                <span className="text-neutral-600 tracking-[0.16em] sm:tracking-[0.18em]">
                   movie
                 </span>
               </motion.p>
