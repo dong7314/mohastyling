@@ -42,3 +42,5 @@ CLAUDE.md
 /.claude
 /lib/generated/prisma
 dev.db
+
+tmp

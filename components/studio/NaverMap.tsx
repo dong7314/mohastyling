@@ -113,8 +113,8 @@ export function NaverMap() {
   if (!clientId) return null;
 
   return (
-    <div className="flex flex-col items-center mt-20">
-      <div className="relative w-[50%]">
+    <div className="flex w-full flex-col items-center mt-20">
+      <div className="relative w-full max-w-[720px] lg:w-[50%] lg:max-w-none">
         <div
           ref={mapRef}
           className="w-full h-[400px] rounded-lg border border-neutral-200 cursor-pointer"
@@ -129,7 +129,7 @@ export function NaverMap() {
           </button>
         )}
       </div>
-      <div className="w-[50%] min-w-[200px] mt-6">
+      <div className="w-full max-w-[720px] min-w-[200px] mt-6 lg:w-[50%] lg:max-w-none">
         <p className="font-sans font-semibold text-lg text-center text-neutral-800 mb-1">
           오시는 길
         </p>
