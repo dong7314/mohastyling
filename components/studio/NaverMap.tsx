@@ -11,13 +11,48 @@ export function NaverMap() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<unknown>(null);
   const [mapReady, setMapReady] = useState(false);
-  const clientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID;
+  const [clientId, setClientId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadConfig() {
+      try {
+        const response = await fetch("/api/public-config", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to load public config: ${response.status}`);
+        }
+
+        const data = (await response.json()) as {
+          naverMapClientId?: string;
+        };
+
+        setClientId(data.naverMapClientId?.trim() || "");
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.error("Failed to load Naver map config:", error);
+          setClientId("");
+        }
+      }
+    }
+
+    loadConfig();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   useEffect(() => {
     if (!clientId || !mapRef.current) return;
 
     function initMap() {
       if (!mapRef.current || !window.naver) return;
+      if (mapInstance.current) return;
 
       const position = new window.naver.maps.LatLng(LAT, LNG);
 
@@ -47,15 +82,20 @@ export function NaverMap() {
       return;
     }
 
-    const existing = document.querySelector("script[data-naver-maps]");
+    const existing = Array.from(
+      document.querySelectorAll<HTMLScriptElement>("script[data-naver-maps]")
+    ).find((scriptElement) => scriptElement.dataset.clientId === clientId);
     if (existing) {
       existing.addEventListener("load", initMap);
-      return;
+      return () => {
+        existing.removeEventListener("load", initMap);
+      };
     }
 
     const script = document.createElement("script");
-    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${clientId}`;
+    script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${encodeURIComponent(clientId)}`;
     script.setAttribute("data-naver-maps", "true");
+    script.setAttribute("data-client-id", clientId);
     script.onload = initMap;
     document.head.appendChild(script);
   }, [clientId]);

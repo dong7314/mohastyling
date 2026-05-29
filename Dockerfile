@@ -23,9 +23,7 @@ FROM base AS builder
 WORKDIR /app
 
 ARG DATABASE_URL=file:/tmp/build.db
-ARG NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=
-ENV DATABASE_URL=$DATABASE_URL \
-    NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=$NEXT_PUBLIC_NAVER_MAP_CLIENT_ID
+ENV DATABASE_URL=$DATABASE_URL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json pnpm-lock.yaml ./
