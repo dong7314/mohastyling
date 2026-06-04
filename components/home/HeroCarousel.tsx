@@ -40,7 +40,7 @@ export function HeroCarousel() {
   }, [nextSlide]);
 
   return (
-    <section className="relative h-[650px] w-full overflow-hidden mt-14 sm:mt-16 bg-neutral-900">
+    <section className="relative h-[clamp(260px,35vh,360px)] w-full overflow-hidden mt-14 bg-neutral-900 sm:mt-16 sm:h-[420px] md:h-[500px] lg:h-[650px]">
       {/* Main images container - all preloaded, simple opacity/transform transition */}
       <div className="relative h-full w-full">
         {heroImages.map((src, index) => {

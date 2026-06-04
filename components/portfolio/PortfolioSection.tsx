@@ -53,7 +53,7 @@ export function PortfolioSection() {
               />
             </h3>
           </Link>
-          <div className="flex">
+          <div className="flex items-start justify-center gap-6 sm:gap-8 md:gap-10">
             <motion.div
               animate={{ y: [0, -30, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
@@ -61,22 +61,23 @@ export function PortfolioSection() {
               <Image
                 src={ProductImage1}
                 alt="Product portfolio1"
-                width={160}
-                height={0}
-                className="h-auto"
+                width={178}
+                height={500}
+                sizes="(max-width: 640px) 34vw, (max-width: 1024px) 18vw, 180px"
+                className="h-[clamp(260px,58vw,360px)] w-auto max-w-[38vw] object-contain sm:h-[340px] md:h-[380px] lg:h-[440px] xl:h-[500px]"
               />
             </motion.div>
             <motion.div
               animate={{ y: [0, 30, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
-              className="ml-10"
             >
               <Image
                 src={ProductImage2}
                 alt="Product portfolio2"
-                width={160}
-                height={0}
-                className="h-auto"
+                width={146}
+                height={500}
+                sizes="(max-width: 640px) 30vw, (max-width: 1024px) 16vw, 150px"
+                className="h-[clamp(260px,58vw,360px)] w-auto max-w-[34vw] object-contain sm:h-[340px] md:h-[380px] lg:h-[440px] xl:h-[500px]"
               />
             </motion.div>
           </div>
@@ -104,13 +105,13 @@ export function PortfolioSection() {
                 width={0}
                 height={0}
                 sizes="300px"
-                className="w-[75%] max-w-[300px] h-auto mr-10 md:mr-[200px] mt-6 md:mt-10"
+                className="w-[75%] max-w-[260px] h-auto mr-10 md:mr-[200px] mt-6 md:mt-10"
               />
             </motion.div>
             <motion.div
               animate={{ y: [0, 30, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "backInOut" }}
-              className="mt-[200px] -ml-[35%]"
+              className="mt-[200px] -ml-[35%] max-sm:mt-[150px]"
             >
               <Image
                 src={CosmeticsImage2}
@@ -118,7 +119,7 @@ export function PortfolioSection() {
                 width={0}
                 height={0}
                 sizes="260px"
-                className="w-[100%] max-w-[250px] h-auto"
+                className="w-[100%] max-w-[250px] max-sm:max-w-[180px] h-auto"
               />
             </motion.div>
           </div>
